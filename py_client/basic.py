@@ -5,19 +5,13 @@ import pprint
 
 endpoint = "https://httpbin.org/status/200/"
 endpoint = "https://httpbin.org/anything"
-endpoint = "http://localhost:8000"
+endpoint = "http://localhost:8000/api/"
 
-content = requests.get(url=endpoint)
+content = requests.post(url=endpoint, params={"id": 2}, json={"title": 'prodcut titlt', 'content': 'this is the product content'})
 # pprint.pprint(content.json())
 content=content.json()
 pprint.pprint(content)
 
-print(f"The use's name is: {content['name']}")
-
-print(f"The user's age is: {content['age']} is_married: {content['is_male']}")
-
 
 # HTTP Request => HTML
 # REST API HTTP Request => JSON (xml, yaml)
-
-
