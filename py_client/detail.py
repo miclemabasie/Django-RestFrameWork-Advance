@@ -2,10 +2,20 @@ import requests
 import pprint
 
 
+product_id = input("Please Enter the ID of the product you wish to get: ")
 
-endpoint = "https://httpbin.org/status/200/"
-endpoint = "https://httpbin.org/anything"
-endpoint = "http://localhost:8000/api/products/7"
+try:
+    product_id = int(product_id)
+except:
+    product_id = None
+    print("Prodcut ID not valid")
 
-content = requests.get(url=endpoint)
-print(content.json())
+if product_id is not None:
+    endpoint = "https://httpbin.org/status/200/"
+    endpoint = "https://httpbin.org/anything"
+    endpoint = f"http://localhost:8000/api/products/{product_id}"
+
+    content = requests.get(url=endpoint)
+    print(content.json())
+
+
