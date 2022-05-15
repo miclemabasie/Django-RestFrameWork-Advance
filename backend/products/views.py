@@ -1,5 +1,5 @@
 from ossaudiodev import control_names
-from rest_framework import generics, mixins, permissions
+from rest_framework import generics, mixins, authentication, permissions
 from yaml import serialize, serialize_all
 from .models import Product
 from .serializers import ProductSerializer
@@ -7,10 +7,16 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import Http404
+from .permissions import IsStaffEditorPermissions
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [
+        authentication.SessionAuthentication,
+        authentication.TokenAuthentication,
+    ]
+    permission_classes = [IsStaffEditorPermissions]
 
     def perform_create(self, serializer):
         # Here we can add some additinal context before saving the instance of the serializer
@@ -92,8 +98,8 @@ product_mixin_api_view = ProductMixinView.as_view()
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
-
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 product_detail_api_view = ProductDetailAPIView.as_view()
 
