@@ -7,16 +7,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import Http404
-from .permissions import IsStaffEditorPermissions
+from api.permissions import IsStaffEditorPermissions
+from api.authentication import TokenAuthentication
+from api.mixins import StaffEditorPermissionMixins
 
-class ProductListCreateAPIView(generics.ListCreateAPIView):
+
+class ProductListCreateAPIView(StaffEditorPermissionMixins, generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [
-        authentication.SessionAuthentication,
-        authentication.TokenAuthentication,
-    ]
-    permission_classes = [IsStaffEditorPermissions]
 
     def perform_create(self, serializer):
         # Here we can add some additinal context before saving the instance of the serializer
@@ -29,17 +27,18 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
             content = title
         serializer.save(content=content)
 
+
 product_list_create_api_view = ProductListCreateAPIView.as_view()
 
 
 # using model mixins
-class ProductMixinView(mixins.ListModelMixin, 
-                        mixins.RetrieveModelMixin, 
-                        mixins.CreateModelMixin,
-                        mixins.DestroyModelMixin,
-                        mixins.UpdateModelMixin,
-                        generics.GenericAPIView
-                    ):
+class ProductMixinView(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin,
+                       mixins.UpdateModelMixin,
+                       generics.GenericAPIView
+                       ):
     """
         In the GenericApiViewMixins we use methods to perform different operations on the model such as list, detail, post, put, delete by defining methods
     """
@@ -47,8 +46,8 @@ class ProductMixinView(mixins.ListModelMixin,
     serializer_class = ProductSerializer
     lookup_field = 'pk'
 
-
     # The get method
+
     def get(self, request, *args, **kwargs):
         print(args, kwargs)
         if 'pk' in kwargs.keys():
@@ -69,12 +68,10 @@ class ProductMixinView(mixins.ListModelMixin,
             content = 'This is my new content from mixins'
         serializer.save(content=content)
 
-    
     def delete(self, request, *args, **kwargs):
         if 'pk' in kwargs.keys():
             print('Yes')
         return self.destroy(request, args, kwargs)
-
 
     def put(self, request, *args, **kwargs):
         if 'pk' in kwargs.keys():
@@ -87,24 +84,21 @@ class ProductMixinView(mixins.ListModelMixin,
         if instance.content == None:
             instance.content = 'This is an updated content from the mixins'
             instance.save()
-        
-
-    
-
-
 
 
 product_mixin_api_view = ProductMixinView.as_view()
 
-class ProductDetailAPIView(generics.RetrieveAPIView):
+
+class ProductDetailAPIView(StaffEditorPermissionMixins, generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+  
+
 
 product_detail_api_view = ProductDetailAPIView.as_view()
 
 
-class ProductListAPIView(generics.ListAPIView):
+class ProductListAPIView(StaffEditorPermissionMixins, generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -112,7 +106,7 @@ class ProductListAPIView(generics.ListAPIView):
 product_list_api_view = ProductListAPIView.as_view()
 
 
-class ProductUpdateAPIView(generics.UpdateAPIView):
+class ProductUpdateAPIView(StaffEditorPermissionMixins, generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
@@ -126,7 +120,7 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
 product_update_api_view = ProductUpdateAPIView.as_view()
 
 
-class ProductDeleteAPIView(generics.DestroyAPIView):
+class ProductDeleteAPIView(StaffEditorPermissionMixins, generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -136,17 +130,13 @@ class ProductDeleteAPIView(generics.DestroyAPIView):
         print('This is where you can do some extra work')
         return super().perform_destroy(instance)
 
+
 product_delete_api_view = ProductDeleteAPIView.as_view()
-
-
-
-
-
 
 
 @api_view(['GET', 'POST'])
 def product_alt_view(request, pk=None, *args, **kwargs):
-    
+
     method = request.method
 
     if method == 'GET':
@@ -172,6 +162,5 @@ def product_alt_view(request, pk=None, *args, **kwargs):
         if serializer.is_valid(raise_exception=True):
             valid_data = serializer.validated_data
             print(valid_data)
-            
-            return Response({'message': serializer.data})
 
+            return Response({'message': serializer.data})

@@ -9,15 +9,15 @@ user_password = getpass("Enter your password: \n")
 
 
 get_token_endpoint = "http://localhost:8000/api/auth/"
-
 get_auth_token = requests.post(get_token_endpoint, json={'username': username, 'password': user_password})
 
 if 'token' in get_auth_token.json():
     token_ = get_auth_token.json()['token']
-
+    print(get_auth_token.json())
     headers = {
-        'Authorization': f"Token {token_}"
+        'Authorization': f"Bearer {token_}"
     }
+
 
     endpoint = "http://localhost:8000/api/products/"
 
