@@ -7,7 +7,8 @@ password = getpass('Enter Password: \n')
 
 auth_endpoint = 'http://localhost:8000/api/auth/'
 
-auth_resquest = requests.post(auth_endpoint, json={'username': username, 'password': password})
+auth_resquest = requests.post(
+    auth_endpoint, json={'username': username, 'password': password})
 auth_response = auth_resquest.json()
 
 if auth_resquest.status_code == 200:
@@ -22,9 +23,8 @@ if auth_resquest.status_code == 200:
         'content': 'Auth content',
         'price': 32.99
     }
-    
+
     create_request = requests.post(endpoint, json=data, headers=headers)
 
     print(create_request.status_code)
     print(create_request.json())
-
