@@ -15,11 +15,15 @@ from api.mixins import StaffEditorPermissionMixins
 class ProductListCreateAPIView(StaffEditorPermissionMixins, generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+   
+
 
     def perform_create(self, serializer):
         # Here we can add some additinal context before saving the instance of the serializer
         # like
         # serializer.save(user=self.request.user)
+        # email = serializer.validated_data.pop('email')
+        # print(f"##########33{email}")
         data = serializer.validated_data
         title = data.get('title')
         content = data.get('content') or None

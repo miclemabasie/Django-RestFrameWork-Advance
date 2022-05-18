@@ -3,4 +3,4 @@ from rest_framework.authentication import TokenAuthentication as BaseAuthenticat
 
 class TokenAuthentication(BaseAuthentication):
 
-    keyword = 'Bearer'
+    keyword = 'Token'
