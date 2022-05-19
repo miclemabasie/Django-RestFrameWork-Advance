@@ -9,10 +9,13 @@ from rest_framework.decorators import api_view
 from django.http import Http404
 from api.permissions import IsStaffEditorPermissions
 from api.authentication import TokenAuthentication
-from api.mixins import StaffEditorPermissionMixins
+from api.mixins import StaffEditorPermissionMixins, ProductdQuerySetMixins
 
 
-class ProductListCreateAPIView(StaffEditorPermissionMixins, generics.ListCreateAPIView):
+class ProductListCreateAPIView(
+    StaffEditorPermissionMixins, 
+    ProductdQuerySetMixins,
+    generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
    
@@ -24,12 +27,52 @@ class ProductListCreateAPIView(StaffEditorPermissionMixins, generics.ListCreateA
         # serializer.save(user=self.request.user)
         # email = serializer.validated_data.pop('email')
         # print(f"##########33{email}")
+        request = self.request
+        user = request.user
         data = serializer.validated_data
         title = data.get('title')
         content = data.get('content') or None
         if content is None:
             content = title
-        serializer.save(content=content)
+        serializer.save(user=user, content=content)
+
+    # def get_queryset(self, *args, **kwargs):
+    #     qs = super().get_queryset(*args, **kwargs)
+    #     request = self.request
+    #     user = request.user
+    #     qs = qs.filter(user=user)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        return qs
 
 
 product_list_create_api_view = ProductListCreateAPIView.as_view()

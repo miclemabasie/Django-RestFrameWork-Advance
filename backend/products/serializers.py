@@ -2,10 +2,13 @@ from wsgiref import validate
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework import validators
+
+from api.serializers import UserPublicSerializer
 from .models import Product
 from api.validators import validate_title, validated_no_hello_in_title, unique_product_title
 
 class ProductSerializer(serializers.ModelSerializer):
+    user = UserPublicSerializer(read_only=True)
     my_discount = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
@@ -18,6 +21,8 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             # 'email',
+            'pk',
+            'user',
             'url',
             'edit_url',
             'pk',
@@ -26,6 +31,11 @@ class ProductSerializer(serializers.ModelSerializer):
             'price',
             'my_discount'
         ]
+
+    def get_my_user_data(self, obj):
+        return {
+            'username': obj.user.username
+        }
     """
         we use the create method to overwrite the way a model instance is created
         Like if we need to remove or add in some context in the data that is needed for creating this model instance
