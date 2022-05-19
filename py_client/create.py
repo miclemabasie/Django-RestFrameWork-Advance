@@ -23,8 +23,8 @@ if auth_resquest.status_code == 200:
         'content': 'Auth content',
         'price': 32.99
     }
-
-    create_request = requests.post(endpoint, json=data, headers=headers)
+    for _ in range(20):
+        create_request = requests.post(endpoint, json=data, headers=headers)
 
     print(create_request.status_code)
     print(create_request.json())

@@ -15,7 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
         view_name='product-detail', 
         lookup_field='pk'
     )
-    title = serializers.CharField(validators=[unique_product_title, validated_no_hello_in_title])
+    # title = serializers.CharField(validators=[unique_product_title, validated_no_hello_in_title])
     # email = serializers.EmailField(write_only=True, validators=[validators.UniqueValidator])
     class Meta:
         model = Product

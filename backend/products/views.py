@@ -40,39 +40,8 @@ class ProductListCreateAPIView(
     #     qs = super().get_queryset(*args, **kwargs)
     #     request = self.request
     #     user = request.user
-    #     qs = qs.filter(user=user)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        return qs
+    #     qs = qs.filter(user=user
+        # return qs
 
 
 product_list_create_api_view = ProductListCreateAPIView.as_view()
