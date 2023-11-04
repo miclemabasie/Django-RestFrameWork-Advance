@@ -1,14 +1,17 @@
 import requests
+import json
 
 # endpoint = "https://httpbin.org/status/200/"
-# endpoint = "https://httpbin.org/anything"
+endpoint = "https://httpbin.org/anything"
 
-endpoint = "http://localhost:8000"
+# endpoint = "http://localhost:8000"
 response = ""
 
-# response = requests.get(endpoint, json={"name": "miclem abasie"}) # json data
+response = requests.get(endpoint, json={"name": "miclem abasie"})  # json data
 # response = requests.get(endpoint, data={"name": "miclem abasie"}) # form data
 
-response = requests.get(endpoint)
+# response = requests.get(endpoint)
 
-print(response)
+data = json.dumps(response.json(), indent=2)
+
+print(data)
