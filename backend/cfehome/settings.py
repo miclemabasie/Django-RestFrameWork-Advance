@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "products.apps.ProductsConfig",
     "django_extensions",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [

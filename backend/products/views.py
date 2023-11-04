@@ -16,6 +16,6 @@ def product_list1(request, *args, **kwargs):
 
 @api_view(["GET"])
 def product_list(request):
-    product = Product.objects.get(id=1)
+    product = Product.objects.all().order_by("?").first()
     data = model_to_dict(product)
     return Response(data, status=200)
