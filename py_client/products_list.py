@@ -3,7 +3,7 @@ import json
 
 endpoint = "http://localhost:8000/products/api/"
 
-response = requests.post(endpoint, json={"name": "miclem"})
+response = requests.get(endpoint, json={"name": "miclem"})
 
 data = json.dumps(response.json())
 

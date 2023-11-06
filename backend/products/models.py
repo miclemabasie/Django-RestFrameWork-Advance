@@ -12,3 +12,9 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
+    def get_discount(self):
+        if len(self.title) > 10:
+            return "%.2f" % (float(self.price) * 0.7)
+        else:
+            return "%.2f" % (float(self.price) * 0.75)

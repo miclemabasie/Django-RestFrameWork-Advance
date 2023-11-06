@@ -5,4 +5,5 @@ app_name = "api"
 
 urlpatterns = [
     path("<int:api_id>/", views.api_home, name="api_home"),
+    path("post/", views.api_post, name="api_post"),
 ]
