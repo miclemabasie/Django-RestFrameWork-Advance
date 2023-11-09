@@ -4,6 +4,7 @@ import json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from products.serializers import ProductSerializer
+from products.models import Product
 
 
 def api_home(request, *args, **kwargs):
@@ -19,6 +20,28 @@ def api_home(request, *args, **kwargs):
     data["headers"] = dict(request.headers)
 
     return JsonResponse(data)
+
+
+# def product_list1(request, *args, **kwargs):
+#     product = Product.objects.all().order_by("?").first()
+#     data = {}
+#     data = model_to_dict(product)
+#     return JsonResponse(data, safe=False)
+
+
+# @api_view(["GET"])
+# def product_list2(request):
+#     product = Product.objects.all().order_by("?").first()
+#     data = model_to_dict(product)
+#     return Response(data, status=200)
+
+
+@api_view(["GET"])
+def product_detail_view(request):
+    product = Product.objects.all().order_by("?").first()
+    serializer = ProductSerializer(product)
+    data = serializer.data
+    return Response(data, status=200)
 
 
 @api_view(["POST"])

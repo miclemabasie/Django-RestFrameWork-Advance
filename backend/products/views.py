@@ -1,31 +1,27 @@
 from django.shortcuts import render
-from django.forms import model_to_dict
+from rest_framework import generics
 from .models import Product
-import json
-from django.http import JsonResponse
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from .serializers import ProductSerializer
 
 
-# def product_list1(request, *args, **kwargs):
-#     product = Product.objects.all().order_by("?").first()
-#     data = {}
-#     data = model_to_dict(product)
-#     return JsonResponse(data, safe=False)
+class ProductListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def perform_create(self, serializer):
+        content = serializer.validated_data.get("content")
+        if content is None:
+            content = "Some default product content"
+        serializer.save(content=content)
+        return super().perform_create(serializer)
 
 
-# @api_view(["GET"])
-# def product_list2(request):
-#     product = Product.objects.all().order_by("?").first()
-#     data = model_to_dict(product)
-#     return Response(data, status=200)
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    # lookup_field = "pk"
 
 
-@api_view(["GET"])
-def product_list(request):
-    data = {}
-    product = Product.objects.get(id=1)
-    serializer = ProductSerializer(product)
-    data = serializer.data
-    return Response(data, status=200)
+class ProductListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
