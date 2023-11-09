@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics
-from .models import Product
-from .serializers import ProductSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+
+from .models import Product
+from .serializers import ProductSerializer
 
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
@@ -28,6 +28,26 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class ProductUpdateDetailView(generics.UpdateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "pk"
+
+    def perform_update(self, serializer):
+        print("Product is currently updating")
+        return super().perform_update(serializer)
+
+
+class ProductDeleteView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "pk"
+
+    def perform_destroy(self, instance):
+        print("Product has been deleted")
+        return super().perform_destroy(instance)
 
 
 # using function based views

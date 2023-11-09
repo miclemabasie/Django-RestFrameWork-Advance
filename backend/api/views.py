@@ -1,10 +1,12 @@
-from django.shortcuts import render
-from django.http import JsonResponse
 import json
+
+from django.http import JsonResponse
+from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from products.serializers import ProductSerializer
+
 from products.models import Product
+from products.serializers import ProductSerializer
 
 
 def api_home(request, *args, **kwargs):

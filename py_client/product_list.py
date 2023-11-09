@@ -1,6 +1,5 @@
 import requests
 
-
 endpoint = (
     "http://localhost:8000/api/products/"  # incoporated list view with createview
 )
