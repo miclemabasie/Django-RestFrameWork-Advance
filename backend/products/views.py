@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, permissions, authentication
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .permissions import isStaffEditorPermission
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -10,6 +11,10 @@ from .serializers import ProductSerializer
 class ProductMixinView(
     generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
 ):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         return list(self, request, *args, **kwargs)
 
@@ -20,6 +25,8 @@ class ProductMixinView(
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [isStaffEditorPermission]
 
     def perform_create(self, serializer):
         content = serializer.validated_data.get("content")
@@ -32,18 +39,22 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.DjangoModelPermissions]
+
     # lookup_field = "pk"
 
 
 class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.DjangoModelPermissions]
 
 
 class ProductUpdateDetailView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
+    permission_classes = [permissions.DjangoModelPermissions]
 
     def perform_update(self, serializer):
         print("Product is currently updating")
@@ -54,6 +65,7 @@ class ProductDeleteView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
+    permission_classes = [permissions.DjangoModelPermissions]
 
     def perform_destroy(self, instance):
         print("Product has been deleted")

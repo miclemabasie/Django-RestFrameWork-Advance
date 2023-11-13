@@ -9,6 +9,4 @@ data = {
 }
 
 response = requests.post(endpoint, json=data)
-
-
 print(response.json())

@@ -11,6 +11,7 @@ from products.serializers import ProductSerializer
 
 def api_home(request, *args, **kwargs):
     data = {}
+    print("@@@@@@@@@", request.META["REMOTE_ADDR"])
     try:
         json_data = request.body
     except:
