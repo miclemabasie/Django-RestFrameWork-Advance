@@ -55,15 +55,15 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSIONS_CLASSES": (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-        'products.permissions.isStaffEditorPermission'
-    )
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+        "products.permissions.isStaffEditorPermission",
+    ),
 }
 
 ROOT_URLCONF = "cfehome.urls"
@@ -90,10 +90,21 @@ WSGI_APPLICATION = "cfehome.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "railway",
+        "HOST": "viaduct.proxy.rlwy.net",
+        "PASSWORD": "fBA*6EE6bBdAbDa*5B5AG*FA1ggc32c2",
+        "USER": "postgres",
+        "PORT": "51086",
     }
 }
 
