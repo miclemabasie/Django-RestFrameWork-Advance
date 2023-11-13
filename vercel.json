@@ -1,0 +1,14 @@
+{
+    "builds": [
+        {
+            "src": "backend/cfehome/wsgi.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "backend/cfehome/wsgi.py"
+        }
+    ]
+}
